@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"testing"
 	"time"
 )
 
@@ -17,7 +16,6 @@ type Store interface {
 type SpyStore struct {
 	response  string
 	cancelled bool
-	t         *testing.T
 }
 
 type SpyResponseWriter struct {
@@ -78,18 +76,4 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 
 func (s *SpyStore) Cancel() {
 	s.cancelled = true
-}
-
-func (s *SpyStore) assertWasCancelled() {
-	s.t.Helper()
-	if !s.cancelled {
-		s.t.Error("store was not told to cancel")
-	}
-}
-
-func (s *SpyStore) assertWasNotCancelled() {
-	s.t.Helper()
-	if s.cancelled {
-		s.t.Error("store was told to cancel")
-	}
 }
