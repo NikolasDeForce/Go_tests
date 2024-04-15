@@ -34,3 +34,14 @@ func ConvertToRoman(arabic int) string {
 	}
 	return result.String()
 }
+
+func ConvertToArabic(roman string) int {
+	var arabic = 0
+	for _, numeral := range allRomanNumerals {
+		for strings.HasPrefix(roman, numeral.Symbol) {
+			arabic += numeral.Value
+			roman = strings.TrimPrefix(roman, numeral.Symbol)
+		}
+	}
+	return arabic
+}
