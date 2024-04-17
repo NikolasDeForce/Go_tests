@@ -6,8 +6,8 @@ import (
 )
 
 type Point struct {
-	X int
-	Y int
+	X float64
+	Y float64
 }
 
 func SecondHand(t time.Time) Point {
@@ -24,4 +24,12 @@ func simpleTime(hours, minutes, seconds int) time.Time {
 
 func testName(t time.Time) string {
 	return t.Format("15:04:05")
+}
+
+func secondsHandPoint(t time.Time) Point {
+	angle := secondsInRadians(t)
+	x := math.Sin(angle)
+	y := math.Cos(angle)
+
+	return Point{x, y}
 }
