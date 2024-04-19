@@ -33,11 +33,3 @@ func secondsHandPoint(t time.Time) Point {
 func minutesInRadians(t time.Time) float64 {
 	return (secondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
 }
-
-func simpleTime(hours, minutes, seconds int) time.Time {
-	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
-}
-
-func testName(t time.Time) string {
-	return t.Format("15:04:05")
-}
