@@ -78,6 +78,25 @@ func TestMinutesInRadians(t *testing.T) {
 	}
 }
 
+func TestMinuteHandPoint(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		point Point
+	}{
+		{simpleTime(0, 30, 0), Point{0, -1}},
+		{simpleTime(0, 45, 0), Point{-1, 0}},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := minutesHandPoint(c.time)
+			if !roughlyEqualPoint(got, c.point) {
+				t.Fatalf("Wanted %v point, but got %v", c.point, got)
+			}
+		})
+	}
+}
+
 func roughlyEqualFloat64(a, b float64) bool {
 	const equalityThreshold = 1e-7
 	return math.Abs(a-b) < equalityThreshold
