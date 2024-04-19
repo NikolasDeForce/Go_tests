@@ -1,9 +1,10 @@
-package math
+package math_test
 
 import (
 	"bytes"
 	"encoding/xml"
 	"testing"
+	"tests/math"
 	"time"
 )
 
@@ -49,7 +50,7 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			SVGWriter(&b, c.time)
+			math.SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -75,7 +76,7 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			SVGWriter(&b, c.time)
+			math.SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
