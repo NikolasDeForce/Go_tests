@@ -23,7 +23,7 @@ func secondsInRadians(t time.Time) float64 {
 }
 
 func secondsHandPoint(t time.Time) Point {
-	return angleToPoint(minutesInRadians(t))
+	return angleToPoint(secondsInRadians(t))
 }
 
 func minutesInRadians(t time.Time) float64 {
