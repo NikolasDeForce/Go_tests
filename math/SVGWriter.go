@@ -33,7 +33,7 @@ func minuteHand(w io.Writer, t time.Time) {
 }
 
 func makeHand(p Point, length float64) Point {
-	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength}
+	p = Point{p.X * length, p.Y * length}
 	p = Point{p.X, -p.Y}
 	return Point{p.X + clockCentreX, p.Y + clockCentreY}
 }
