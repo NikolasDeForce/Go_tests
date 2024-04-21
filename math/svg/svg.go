@@ -1,8 +1,9 @@
-package math
+package svg
 
 import (
 	"fmt"
 	"io"
+	cf "tests/math"
 	"time"
 )
 
@@ -14,7 +15,7 @@ const (
 	clockCentreY     = 150
 )
 
-func SVGWriter(w io.Writer, t time.Time) {
+func Write(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	secondHand(w, t)
@@ -24,25 +25,25 @@ func SVGWriter(w io.Writer, t time.Time) {
 }
 
 func secondHand(w io.Writer, t time.Time) {
-	p := makeHand(secondsHandPoint(t), secondHandLength)
+	p := makeHand(cf.SecondsHandPoint(t), secondHandLength)
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 func minuteHand(w io.Writer, t time.Time) {
-	p := makeHand(minutesHandPoint(t), minuteHandLength)
+	p := makeHand(cf.MinutesHandPoint(t), minuteHandLength)
 
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 func hourHand(w io.Writer, t time.Time) {
-	p := makeHand(hourHandPoint(t), houeHandLength)
+	p := makeHand(cf.HourHandPoint(t), houeHandLength)
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
-func makeHand(p Point, length float64) Point {
-	p = Point{p.X * length, p.Y * length}
-	p = Point{p.X, -p.Y}
-	return Point{p.X + clockCentreX, p.Y + clockCentreY}
+func makeHand(p cf.Point, length float64) cf.Point {
+	p = cf.Point{X: p.X * length, Y: p.Y * length}
+	p = cf.Point{X: p.X, Y: -p.Y}
+	return cf.Point{X: p.X + clockCentreX, Y: p.Y + clockCentreY}
 }
 
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

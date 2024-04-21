@@ -10,36 +10,28 @@ type Point struct {
 	Y float64
 }
 
-func SecondHand(t time.Time) Point {
-	p := secondsHandPoint(t)
-	p = Point{p.X * secondHandLength, p.Y * secondHandLength}
-	p = Point{p.X, -p.Y}
-	p = Point{p.X + clockCentreX, p.Y + clockCentreY}
-	return p
-}
-
-func secondsInRadians(t time.Time) float64 {
+func SecondsInRadians(t time.Time) float64 {
 	return (math.Pi / (30 / float64(t.Second())))
 }
 
-func secondsHandPoint(t time.Time) Point {
-	return angleToPoint(secondsInRadians(t))
+func SecondsHandPoint(t time.Time) Point {
+	return angleToPoint(SecondsInRadians(t))
 }
 
-func minutesInRadians(t time.Time) float64 {
-	return (secondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+func MinutesInRadians(t time.Time) float64 {
+	return (SecondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
 }
 
-func minutesHandPoint(t time.Time) Point {
-	return angleToPoint(minutesInRadians(t))
+func MinutesHandPoint(t time.Time) Point {
+	return angleToPoint(MinutesInRadians(t))
 }
 
-func hourIsRadians(t time.Time) float64 {
-	return (minutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
+func HourIsRadians(t time.Time) float64 {
+	return (MinutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
 }
 
-func hourHandPoint(t time.Time) Point {
-	return angleToPoint(hourIsRadians(t))
+func HourHandPoint(t time.Time) Point {
+	return angleToPoint(HourIsRadians(t))
 }
 
 func angleToPoint(angle float64) Point {

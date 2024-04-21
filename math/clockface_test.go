@@ -19,7 +19,7 @@ func TestSecondsInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondsInRadians(c.time)
+			got := SecondsInRadians(c.time)
 
 			if got != c.angle {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
@@ -39,23 +39,12 @@ func TestSecondsInPoint(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondsHandPoint(c.time)
+			got := SecondsHandPoint(c.time)
 
 			if !roughlyEqualPoint(got, c.point) {
 				t.Fatalf("Wanted %v Point, but got %v", c.point, got)
 			}
 		})
-	}
-}
-
-func TestSecondHandAt30Seconds(t *testing.T) {
-	tm := time.Date(1337, time.January, 1, 0, 0, 30, 0, time.UTC)
-
-	want := Point{X: 150, Y: 150 + 90}
-	got := SecondHand(tm)
-
-	if got != want {
-		t.Errorf("Got %v wanted %v", got, want)
 	}
 }
 
@@ -70,7 +59,7 @@ func TestMinutesInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := minutesInRadians(c.time)
+			got := MinutesInRadians(c.time)
 			if got != c.angle {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
@@ -89,7 +78,7 @@ func TestMinuteHandPoint(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := minutesHandPoint(c.time)
+			got := MinutesHandPoint(c.time)
 			if !roughlyEqualPoint(got, c.point) {
 				t.Fatalf("Wanted %v point, but got %v", c.point, got)
 			}
@@ -110,7 +99,7 @@ func TestHoursInRadians(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := hourIsRadians(c.time)
+			got := HourIsRadians(c.time)
 			if !roughlyEqualFloat64(got, c.angle) {
 				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
@@ -129,7 +118,7 @@ func TestHourHandPoint(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := hourHandPoint(c.time)
+			got := HourHandPoint(c.time)
 			if !roughlyEqualPoint(got, c.point) {
 				t.Fatalf("Wanted %v point, but got %v", c.point, got)
 			}

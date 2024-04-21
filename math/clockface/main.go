@@ -2,11 +2,11 @@ package main
 
 import (
 	"os"
-	"tests/math"
+	"tests/math/svg"
 	"time"
 )
 
 func main() {
 	t := time.Now()
-	math.SVGWriter(os.Stdout, t)
+	svg.Write(os.Stdout, t)
 }
