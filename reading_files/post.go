@@ -10,6 +10,7 @@ import (
 const (
 	titleSeparator       = "Title: "
 	descriptionSeparator = "Description: "
+	tagsSeparator        = "Tags: "
 )
 
 func getPost(fileSystem fs.FS, fileName string) (Post, error) {
@@ -32,5 +33,6 @@ func newPost(postFile io.Reader) (Post, error) {
 	return Post{
 		Title:       readMetaLine(titleSeparator),
 		Description: readMetaLine(descriptionSeparator),
+		Tags:        strings.Split(readMetaLine(tagsSeparator), ", "),
 	}, nil
 }
