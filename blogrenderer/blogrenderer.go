@@ -11,6 +11,11 @@ type PostRenderer struct {
 	templ *template.Template
 }
 
+var (
+	//go:embed "templates/*"
+	postTemplate embed.FS
+)
+
 func NewPostRenderer() (*PostRenderer, error) {
 	templ, err := template.ParseFS(postTemplate, "templates/*.gohtml")
 	if err != nil {
@@ -20,33 +25,14 @@ func NewPostRenderer() (*PostRenderer, error) {
 	return &PostRenderer{templ: templ}, nil
 }
 
-var (
-	//go:embed "templates/*"
-	postTemplate embed.FS
-)
-
 func (r *PostRenderer) Render(w io.Writer, p Post) error {
 
-	if err := r.templ.ExecuteTemplate(w, "blog.gohtml", p); err != nil {
-		return err
-	}
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", p)
 
-	return nil
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
-	indexTemplate := `<ol>{{range .}}<li><a href="/post/{{.SanitiseTitle}}">{{.Title}}</a></li>{{end}}</ol>`
-
-	templ, err := template.New("index").Parse(indexTemplate)
-	if err != nil {
-		return err
-	}
-
-	if err := templ.Execute(w, posts); err != nil {
-		return err
-	}
-
-	return nil
+	return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
 }
 
 func (p Post) SanitiseTitle() string {
