@@ -1,6 +1,6 @@
 package arrays
 
-func Reduce[A any](collection []A, accumulator func(A, A) A, initialValue A) A {
+func Reduce[A, B any](collection []A, accumulator func(B, A) B, initialValue B) B {
 	var result = initialValue
 	for _, x := range collection {
 		result = accumulator(result, x)
