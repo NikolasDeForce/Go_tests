@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 )
 
@@ -125,9 +124,7 @@ func TestLeague(t *testing.T) {
 		assertStatusCode(t, res.Code, http.StatusOK)
 		assertLeague(t, got, wantedLeague)
 
-		if res.Result().Header.Get("content-type") != "application/json" {
-			t.Errorf("response did not have content-type of application/json, got %v", res.Result().Header)
-		}
+		assertContentType(t, res, jsonContentType)
 	})
 }
 
@@ -168,25 +165,4 @@ func NewGetScoreRequest(name string) *http.Request {
 func newPostWinRequest(name string) *http.Request {
 	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
 	return req
-}
-
-func assertStatusCode(t testing.TB, got, want int) {
-	t.Helper()
-	if got != want {
-		t.Errorf("did not get correct status, got %d want %d", got, want)
-	}
-}
-
-func assertResponseBody(t testing.TB, got, want string) {
-	t.Helper()
-	if got != want {
-		t.Errorf("response body is wrong, got %q want %q", got, want)
-	}
-}
-
-func assertLeague(t testing.TB, got, want []Player) {
-	t.Helper()
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %v want %v", got, want)
-	}
 }
