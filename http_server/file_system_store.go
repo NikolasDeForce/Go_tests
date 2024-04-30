@@ -16,25 +16,21 @@ func (f *FileSystemPlayerStore) GetLeague() League {
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
-	var wins int
+	player := f.GetLeague().Find(name)
 
-	for _, player := range f.GetLeague() {
-		if player.Name == name {
-			wins = player.Wins
-			break
-		}
+	if player != nil {
+		return player.Wins
 	}
 
-	return wins
+	return 0
 }
 
 func (f *FileSystemPlayerStore) RecordWin(name string) {
 	league := f.GetLeague()
+	player := league.Find(name)
 
-	for i, player := range league {
-		if player.Name == name {
-			league[i].Wins++
-		}
+	if player != nil {
+		player.Wins++
 	}
 
 	f.database.Seek(0, io.SeekStart)
