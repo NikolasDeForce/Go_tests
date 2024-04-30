@@ -33,8 +33,8 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(res, req)
 
-		assertStatusCode(t, res.Code, http.StatusOK)
-		assertResponseBody(t, res.Body.String(), "20")
+		AssertStatusCode(t, res.Code, http.StatusOK)
+		AssertResponseBody(t, res.Body.String(), "20")
 	})
 	t.Run("return Floyd's scores", func(t *testing.T) {
 		req := NewGetScoreRequest("Floyd")
@@ -42,8 +42,8 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(res, req)
 
-		assertStatusCode(t, res.Code, http.StatusOK)
-		assertResponseBody(t, res.Body.String(), "10")
+		AssertStatusCode(t, res.Code, http.StatusOK)
+		AssertResponseBody(t, res.Body.String(), "10")
 	})
 
 	t.Run("return 404 error on missing players", func(t *testing.T) {
@@ -52,7 +52,7 @@ func TestGETPlayers(t *testing.T) {
 
 		server.ServeHTTP(res, req)
 
-		assertStatusCode(t, res.Code, http.StatusNotFound)
+		AssertStatusCode(t, res.Code, http.StatusNotFound)
 	})
 }
 
@@ -72,7 +72,7 @@ func TestStoreWins(t *testing.T) {
 
 		server.ServeHTTP(res, req)
 
-		assertStatusCode(t, res.Code, http.StatusAccepted)
+		AssertStatusCode(t, res.Code, http.StatusAccepted)
 
 		if len(store.winCalls) != 1 {
 			t.Errorf("got %d calls to RecordWin want %d", len(store.winCalls), 1)
@@ -102,7 +102,7 @@ func TestLeague(t *testing.T) {
 			t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", res.Body, err)
 		}
 
-		assertStatusCode(t, res.Code, http.StatusOK)
+		AssertStatusCode(t, res.Code, http.StatusOK)
 	})
 
 	t.Run("it returns the league table as JSON", func(t *testing.T) {
@@ -121,10 +121,10 @@ func TestLeague(t *testing.T) {
 		server.ServeHTTP(res, req)
 
 		got := getLeagueFromResponse(t, res.Body)
-		assertStatusCode(t, res.Code, http.StatusOK)
-		assertLeague(t, got, wantedLeague)
+		AssertStatusCode(t, res.Code, http.StatusOK)
+		AssertLeague(t, got, wantedLeague)
 
-		assertContentType(t, res, jsonContentType)
+		AssertContentType(t, res, jsonContentType)
 	})
 }
 

@@ -20,7 +20,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Chris", 33},
 		}
 
-		assertLeague(t, got, want)
+		AssertLeague(t, got, want)
 	})
 
 	t.Run("get player score", func(t *testing.T) {
@@ -34,8 +34,6 @@ func TestFileSystemStore(t *testing.T) {
 
 		want := 33
 
-		if got != want {
-			t.Errorf("got %d want %d", got, want)
-		}
+		AssertScoreEquals(t, got, want)
 	})
 }
