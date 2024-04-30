@@ -9,7 +9,7 @@ type FileSystemPlayerStore struct {
 	database io.ReadWriteSeeker
 }
 
-func (f *FileSystemPlayerStore) GetLeague() []Player {
+func (f *FileSystemPlayerStore) GetLeague() League {
 	f.database.Seek(0, io.SeekStart)
 	league, _ := NewLeague(f.database)
 	return league
