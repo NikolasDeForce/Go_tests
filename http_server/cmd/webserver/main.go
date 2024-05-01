@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"tests/http_server"
 )
 
 const dbFileName = "game.db.json"
