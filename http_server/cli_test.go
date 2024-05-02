@@ -3,7 +3,7 @@ package poker
 import "testing"
 
 func TestCLI(t *testing.T) {
-	playerStore := StubPlayersStore{}
+	playerStore := &StubPlayersStore{}
 	cli := &CLI{playerStore}
 	cli.PlayPoker()
 
