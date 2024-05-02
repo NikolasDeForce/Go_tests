@@ -7,14 +7,14 @@ import (
 )
 
 type CLI struct {
-	playerStore PlayerStore
-	in          io.Reader
+	PlayerStore PlayerStore
+	In          io.Reader
 }
 
 func (cli *CLI) PlayPoker() {
-	reader := bufio.NewScanner(cli.in)
+	reader := bufio.NewScanner(cli.In)
 	reader.Scan()
-	cli.playerStore.RecordWin(extractWinner(reader.Text()))
+	cli.PlayerStore.RecordWin(extractWinner(reader.Text()))
 }
 
 func extractWinner(userInput string) string {
