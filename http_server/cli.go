@@ -10,6 +10,8 @@ import (
 
 const PlayerPrompt = "Please enter the number of players: "
 
+const ErrorGame = "Ooops, we found error in game. Sorry, try play to late!"
+
 type Game interface {
 	Start(numberOfPlayers int)
 	Finish(winner string)
@@ -37,7 +39,7 @@ func (cli *CLI) PlayPoker() {
 	numberOfPlayers, err := strconv.Atoi(cli.readLine())
 
 	if err != nil {
-		fmt.Fprint(cli.Out, "you're so silly")
+		fmt.Fprint(cli.Out, ErrorGame)
 		return
 	}
 
