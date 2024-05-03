@@ -20,6 +20,7 @@ type scheduledAlert struct {
 type GameSpy struct {
 	StartedWith  int
 	FinishedWith string
+	StartCalled  bool
 }
 
 func (g *GameSpy) Start(numberOfPlayers int) {
@@ -80,6 +81,19 @@ func TestCLI(t *testing.T) {
 
 		if game.StartedWith != 7 {
 			t.Errorf("wanted Start called with 7 but got %d", game.StartedWith)
+		}
+	})
+
+	t.Run("it prints an error when a non numeric value is entered and does not start the game", func(t *testing.T) {
+		stdOut := &bytes.Buffer{}
+		in := strings.NewReader("Pies\n")
+		game := &GameSpy{}
+
+		cli := NewCli(in, stdOut, game)
+		cli.PlayPoker()
+
+		if game.StartCalled {
+			t.Errorf("game should not have started")
 		}
 	})
 }
