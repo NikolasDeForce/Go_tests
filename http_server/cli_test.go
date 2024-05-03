@@ -7,18 +7,21 @@ import (
 	"time"
 )
 
-type SpyBlindAlerter struct {
-	alerts []struct {
-		scheduledAt time.Duration
-		amount      int
-	}
+type scheduledAlert struct {
+	at     time.Duration
+	amount int
 }
 
-func (s *SpyBlindAlerter) ScheduledAlertAt(duration time.Duration, amount int) {
-	s.alerts = append(s.alerts, struct {
-		scheduledAt time.Duration
-		amount      int
-	}{duration, amount})
+func (s scheduledAlert) String() string {
+	return fmt.Sprintf("%d chips at %v", s.amount, s.at)
+}
+
+type SpyBlindAlerter struct {
+	alerts []scheduledAlert
+}
+
+func (s *SpyBlindAlerter) ScheduledAlertAt(at time.Duration, amount int) {
+	s.alerts = append(s.alerts, scheduledAlert{at, amount})
 }
 
 var dummySpyAlerter = &SpyBlindAlerter{}
@@ -56,10 +59,7 @@ func TestCLI(t *testing.T) {
 		cli := NewCli(playerStore, in, blindAlerter)
 		cli.PlayPoker()
 
-		cases := []struct {
-			expectedScheduleTime time.Duration
-			expectedAmount       int
-		}{
+		cases := []scheduledAlert{
 			{0 * time.Second, 100},
 			{10 * time.Minute, 200},
 			{20 * time.Minute, 300},
@@ -73,25 +73,24 @@ func TestCLI(t *testing.T) {
 			{100 * time.Minute, 8000},
 		}
 
-		for i, c := range cases {
-			t.Run(fmt.Sprintf("%d scheduler for %v", c.expectedAmount, c.expectedScheduleTime), func(t *testing.T) {
+		for i, want := range cases {
+			t.Run(fmt.Sprint(want), func(t *testing.T) {
 				if len(blindAlerter.alerts) <= 1 {
 					t.Fatalf("alert %d was not scheduled %v", i, blindAlerter.alerts)
 				}
 
-				alert := blindAlerter.alerts[i]
+				got := blindAlerter.alerts[i]
 
-				amountGot := alert.amount
-				if amountGot != c.expectedAmount {
-					t.Errorf("got amount %d, want %d", amountGot, c.expectedAmount)
-				}
-
-				gotScheduledTime := alert.scheduledAt
-				if gotScheduledTime != c.expectedScheduleTime {
-					t.Errorf("got scheduled time of %v, want %v", gotScheduledTime, c.expectedScheduleTime)
-				}
+				AssertScheduledAlert(t, got, want)
 			})
 		}
 	})
+}
 
+func AssertScheduledAlert(t testing.TB, got, want scheduledAlert) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("got %+v, want %+v", got, want)
+	}
 }
