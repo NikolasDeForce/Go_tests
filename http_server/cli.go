@@ -7,10 +7,6 @@ import (
 	"time"
 )
 
-type BlindAlerter interface {
-	ScheduledAlertAt(duration time.Duration, amount int)
-}
-
 type CLI struct {
 	PlayerStore PlayerStore
 	In          *bufio.Scanner
@@ -36,7 +32,7 @@ func (cli *CLI) scheduleBlindAlerts() {
 	blindTime := 0 * time.Second
 	for _, blind := range blinds {
 		cli.Alerter.ScheduledAlertAt(blindTime, blind)
-		blindTime = blindTime + 10*time.Minute
+		blindTime = blindTime + 10*time.Second
 	}
 }
 
