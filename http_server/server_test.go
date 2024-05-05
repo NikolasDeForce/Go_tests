@@ -128,6 +128,19 @@ func TestLeague(t *testing.T) {
 	})
 }
 
+func TestGame(t *testing.T) {
+	t.Run("GET /game returns 200", func(t *testing.T) {
+		server := NewPlayerServer(&StubPlayersStore{})
+
+		req, _ := http.NewRequest(http.MethodGet, "/game", nil)
+		res := httptest.NewRecorder()
+
+		server.ServeHTTP(res, req)
+
+		AssertStatusCode(t, res.Code, http.StatusOK)
+	})
+}
+
 func (s *StubPlayersStore) GetPlayerScore(name string) int {
 	score := s.scores[name]
 	return score
