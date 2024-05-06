@@ -3,6 +3,7 @@ package poker
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"strings"
 	"testing"
 	"time"
@@ -121,6 +122,6 @@ func (s scheduledAlert) String() string {
 	return fmt.Sprintf("%d chips at %v", s.amount, s.at)
 }
 
-func (s *SpyBlindAlerter) ScheduledAlertAt(at time.Duration, amount int) {
+func (s *SpyBlindAlerter) ScheduledAlertAt(at time.Duration, amount int, to io.Writer) {
 	s.alerts = append(s.alerts, scheduledAlert{at, amount})
 }

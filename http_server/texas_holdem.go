@@ -1,6 +1,9 @@
 package poker
 
-import "time"
+import (
+	"os"
+	"time"
+)
 
 type TexasHoldem struct {
 	alerter BlindAlerter
@@ -20,7 +23,7 @@ func (p *TexasHoldem) Start(numberOfPlayers int) {
 	blinds := []int{100, 200, 300, 400, 500, 600, 800, 1000, 2000, 4000, 8000}
 	blindTime := 0 * time.Second
 	for _, blind := range blinds {
-		p.alerter.ScheduledAlertAt(blindTime, blind)
+		p.alerter.ScheduledAlertAt(blindTime, blind, os.Stdout)
 		blindTime = blindTime + blindIncrement
 	}
 }
