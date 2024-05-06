@@ -229,6 +229,16 @@ func newPostWinRequest(name string) *http.Request {
 	return req
 }
 
+func retryUntil(d time.Duration, f func() bool) bool {
+	deadline := time.Now().Add(d)
+	for time.Now().Before(deadline) {
+		if f() {
+			return true
+		}
+	}
+	return false
+}
+
 func AssertPlayerWin(t testing.TB, store *StubPlayersStore, winner string) {
 	t.Helper()
 

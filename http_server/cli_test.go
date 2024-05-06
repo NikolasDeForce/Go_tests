@@ -19,9 +19,10 @@ type scheduledAlert struct {
 }
 
 type GameSpy struct {
-	StartedWith  int
-	FinishedWith string
-	StartCalled  bool
+	StartedWith    int
+	FinishedWith   string
+	StartCalled    bool
+	FinishedCalled bool
 }
 
 func (g *GameSpy) Start(numberOfPlayers int, out io.Writer) {
@@ -30,6 +31,10 @@ func (g *GameSpy) Start(numberOfPlayers int, out io.Writer) {
 
 func (g *GameSpy) Finish(winner string) {
 	g.FinishedWith = winner
+}
+
+func userSends(messages ...string) io.Reader {
+	return strings.NewReader(strings.Join(messages, "\n"))
 }
 
 var (
@@ -41,6 +46,20 @@ var (
 )
 
 func TestCLI(t *testing.T) {
+	t.Run("start game with 3 players and finish game with chris as winner", func(t *testing.T) {
+		game := &GameSpy{}
+
+		out := &bytes.Buffer{}
+		in := userSends("3", "Chris wins")
+
+		NewCli(in, out, game).PlayPoker()
+
+		AssertMessageSentToUser(t, out, PlayerPrompt)
+		assertGameStartedWith(t, game, 3)
+		assertFinishCalledWith(t, game, "Chris")
+
+	})
+
 	t.Run("record chris win from user input", func(t *testing.T) {
 		in := strings.NewReader("1\nChris wins\n")
 		game := &GameSpy{}
@@ -115,6 +134,44 @@ func AssertMessageSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...str
 	got := stdout.String()
 	if got != want {
 		t.Errorf("got %q sent to output but expected %+v", got, messages)
+	}
+}
+
+func assertGameStartedWith(t testing.TB, game *GameSpy, numberOfPlayersWanted int) {
+	t.Helper()
+
+	passed := retryUntil(500*time.Millisecond, func() bool {
+		return game.StartedWith == numberOfPlayersWanted
+	})
+
+	if !passed {
+		t.Errorf("wanted Start called with %d but got %d", numberOfPlayersWanted, game.StartedWith)
+	}
+}
+
+func assertFinishCalledWith(t testing.TB, game *GameSpy, winner string) {
+	t.Helper()
+
+	passed := retryUntil(500*time.Millisecond, func() bool {
+		return game.FinishedWith == winner
+	})
+
+	if !passed {
+		t.Errorf("expected finish called with %q but got %q", winner, game.FinishedWith)
+	}
+}
+
+func assertGameNotFinished(t testing.TB, game *GameSpy) {
+	t.Helper()
+	if game.FinishedCalled {
+		t.Errorf("game should not have finished")
+	}
+}
+
+func assertGameNotStarted(t testing.TB, game *GameSpy) {
+	t.Helper()
+	if game.StartCalled {
+		t.Errorf("game should not have started")
 	}
 }
 
