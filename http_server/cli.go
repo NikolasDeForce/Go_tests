@@ -13,7 +13,7 @@ const PlayerPrompt = "Please enter the number of players: "
 const ErrorGame = "Ooops, we found error in game. Sorry, try play to late!"
 
 type Game interface {
-	Start(numberOfPlayers int)
+	Start(numberOfPlayers int, alertsDestination io.Writer)
 	Finish(winner string)
 }
 
@@ -43,7 +43,7 @@ func (cli *CLI) PlayPoker() {
 		return
 	}
 
-	cli.game.Start(numberOfPlayers)
+	cli.game.Start(numberOfPlayers, cli.Out)
 
 	winnerInput := cli.readLine()
 	winner := extractWinner(winnerInput)
