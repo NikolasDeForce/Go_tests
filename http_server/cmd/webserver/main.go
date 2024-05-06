@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tests/http_server"
+	poker "tests/http_server"
 )
 
 const dbFileName = "game.db.json"
@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("problem creating file system player store, %v", err)
 	}
 
-	server := poker.NewPlayerServer(store)
+	server, _ := poker.NewPlayerServer(store)
 
 	if err := http.ListenAndServe(":8010", server); err != nil {
 		log.Fatalf("could not listen on port 5000 %v", err)
